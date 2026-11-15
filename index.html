@@ -37,8 +37,8 @@ input[type=range]{width:100%;accent-color:var(--ac)}input[type=text]{font:inheri
 .sq.last::before,.sq.sel::before{content:"";position:absolute;inset:0;background:var(--hl)}
 .sq.chk::before{content:"";position:absolute;inset:0;background:radial-gradient(rgba(230,40,40,.8),transparent 72%)}
 .pc{position:relative;z-index:1;cursor:grab;transition:transform .12s}.sq:hover .pc{transform:scale(1.06)}
-.pc.w,.ghost.w{background:linear-gradient(165deg,var(--pw) 0%,var(--pw2) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;text-shadow:none;filter:drop-shadow(0 0 .8px var(--pow)) drop-shadow(0 0 .8px var(--pow)) drop-shadow(0 0 1px var(--pow)) drop-shadow(0 0 6px var(--pgw)) drop-shadow(0 2px 1.5px rgba(0,0,0,.35))}
-.pc.b,.ghost.b{background:linear-gradient(165deg,var(--pb) 0%,var(--pb2) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;text-shadow:none;filter:drop-shadow(0 0 .8px var(--pob)) drop-shadow(0 0 .8px var(--pob)) drop-shadow(0 0 6px var(--pgb)) drop-shadow(0 2px 1.5px rgba(0,0,0,.35))}
+.pc.w,.ghost.w{background:linear-gradient(165deg,var(--pw) 0%,var(--pw2) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;text-shadow:none;filter:drop-shadow(0 0 1px var(--pow)) drop-shadow(0 0 1px var(--pow)) drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+.pc.b,.ghost.b{background:linear-gradient(165deg,var(--pb) 0%,var(--pb2) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;text-shadow:none;filter:drop-shadow(0 0 1px var(--pob)) drop-shadow(0 0 1px var(--pob)) drop-shadow(0 2px 2px rgba(0,0,0,.4))}
 .ghost.w{filter:drop-shadow(0 0 .8px var(--pow)) drop-shadow(0 0 .8px var(--pow)) drop-shadow(0 0 6px var(--pgw)) drop-shadow(0 10px 6px rgba(0,0,0,.4))}
 .ghost.b{filter:drop-shadow(0 0 .8px var(--pob)) drop-shadow(0 0 6px var(--pgb)) drop-shadow(0 10px 6px rgba(0,0,0,.4))}
 .pc.tk,.ghost.tk{background:none;-webkit-background-clip:border-box;background-clip:border-box;-webkit-text-fill-color:currentColor;font-family:system-ui,"Segoe UI",sans-serif;font-weight:800;filter:drop-shadow(0 2px 1.5px rgba(0,0,0,.4))}
@@ -152,6 +152,88 @@ aside{background:var(--hpn);border:0;box-shadow:none}
 .hrw button.p{background:var(--hac);color:var(--hacf)}
 .hp .tg:last-of-type{border-bottom:0}
 @media(max-width:760px){.setrow{grid-template-columns:1fr}.hp.sel{position:static}.hrow{gap:20px}.hmain>.view:not([hidden]){gap:20px}}
+
+</style>
+<style id="polish">
+/* ===== Visual polish (additive, no layout or behaviour changes) ===== */
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+::selection{background:rgba(129,182,76,.35)}
+h1,h2,h3{letter-spacing:-.01em}
+
+/* scrollbars */
+html,#moves{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:10px;border:2px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.34);background-clip:padding-box;border:2px solid transparent}
+
+/* buttons */
+button{transition:background .15s,transform .1s}
+
+/* sidebar */
+.hnav{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0) 40%),var(--hnv)}
+.logo{letter-spacing:.01em;font-size:22px}
+.ni{transition:background .18s,transform .15s,box-shadow .18s}
+.ni:hover{transform:translateX(2px)}
+.ni.act{background:linear-gradient(90deg,rgba(129,182,76,.18),rgba(255,255,255,.06));box-shadow:inset 3px 0 0 var(--hac)}
+.me{border-radius:10px;transition:background .18s}.me:hover{background:rgba(255,255,255,.07)}
+.av{box-shadow:0 2px 8px rgba(0,0,0,.35),0 0 0 2px rgba(255,255,255,.08)}
+
+/* panels and cards */
+.hmain .hp{border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 60%),var(--hpn);box-shadow:0 3px 10px rgba(0,0,0,.28);border-radius:14px}
+.panel{border-radius:14px}
+.card{transition:transform .18s,box-shadow .18s,border-color .18s}
+.card:hover{border-color:var(--ac);box-shadow:0 12px 28px rgba(0,0,0,.28)}
+.hp h3{letter-spacing:.01em}
+.hrw{transition:background .15s;border-radius:8px}
+.hrw:hover{background:rgba(255,255,255,.04)}
+.rb{box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.pb{border-radius:10px;transition:background .15s,border-color .15s,transform .12s}
+.pb:hover{transform:translateY(-1px)}
+
+/* difficulty buttons and primary action */
+.q button{transition:background .15s,border-color .15s,transform .12s,box-shadow .15s}
+.q button:hover{transform:translateY(-1px)}
+.q button.on{box-shadow:0 0 0 1px var(--hac)}
+.start{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 55%),var(--hac);letter-spacing:.02em;transition:filter .15s,transform .1s}
+.start:hover{transform:translateY(-1px)}
+body.hubmode .start{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 55%),var(--hac)}
+body.hubmode .start:hover{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 55%),var(--hac)}
+.side{transition:background .15s,transform .12s}.side:hover{transform:translateY(-1px)}
+
+/* board */
+#board{box-shadow:var(--bsh,0 6px 20px rgba(0,0,0,.4)),0 0 0 5px rgba(0,0,0,.25)}
+.dot{background:rgba(20,20,20,.26)}
+.cap{border:5px solid rgba(20,20,20,.26)}
+.sq.chk::before{background:radial-gradient(circle,rgba(235,50,50,.95) 0%,rgba(235,50,50,.55) 40%,transparent 72%)}
+.co{font-weight:700;opacity:.8;font-size:10.5px}
+#evw{box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 4px 14px rgba(0,0,0,.35);border-radius:8px}
+#evb{transition:height .45s cubic-bezier(.3,.7,.3,1)}
+#st{display:block;width:fit-content;max-width:100%;margin:16px auto 0;padding:6px 18px;border-radius:999px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.08);font-size:17px}
+#st:empty{display:none}
+
+/* side panel in game */
+aside{border:1px solid rgba(255,255,255,.07);border-radius:16px}
+#moves{background:rgba(0,0,0,.2);border-radius:12px;border-color:rgba(255,255,255,.09);font-variant-numeric:tabular-nums}
+#moves .m{transition:background .12s}
+#moves .m.cur{font-weight:600}
+#moves .n{opacity:.8}
+
+/* toggles and inputs */
+.tg{transition:background .15s;border-radius:8px}
+.tg:hover{background:rgba(255,255,255,.035)}
+.tg i{box-shadow:inset 0 1px 3px rgba(0,0,0,.35);transition:background .2s,box-shadow .2s}
+.tg i::after{box-shadow:0 2px 5px rgba(0,0,0,.4)}
+input[type=text],.cr select{transition:border-color .15s,box-shadow .15s}
+input[type=text]:focus,.cr select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(129,182,76,.25)}
+input[type=range]{height:6px;cursor:pointer}
+
+/* dialogs */
+#end,#cf,#pe{background:rgba(0,0,0,.62)}
+.eb{border-radius:20px;border:1px solid rgba(255,255,255,.1);box-shadow:0 12px 30px rgba(0,0,0,.5);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0) 50%),var(--hnv)}
+
+/* keyboard focus */
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--hac,var(--ac));outline-offset:2px}
 </style>
 </head>
 <body>
@@ -241,9 +323,9 @@ let g=new Chess(),rv=new Chess(),G=g,mode="play",human="w",flip=false,sel=null,b
 const ST={get(){try{return JSON.parse(localStorage.getItem("chessGames")||"[]")}catch(e){return[]}},set(a){try{localStorage.setItem("chessGames",JSON.stringify(a))}catch(e){}}};
 let curV="hub",prevV="hub";
 function show(v){if(v=="settings")prevV=curV;curV=v;document.body.classList.toggle("hubmode",v!="game");$("shell").hidden=v=="game";if(v!="game")renderHub();document.querySelectorAll(".view").forEach(e=>e.hidden=e.id!=v);document.querySelectorAll(".ni").forEach(b=>b.classList.toggle("act",b.dataset.v==v))}
-const DEF={instBot:true,instMove:false,hints:true,coords:true,lastMove:true,theme:"arcade"};
+const DEF={lowDetail:false,instBot:true,instMove:false,hints:true,coords:true,lastMove:true,theme:"arcade"};
 let S=Object.assign({},DEF,(()=>{try{return JSON.parse(localStorage.getItem("chessSet")||"{}")}catch(e){return{}}})());
-const SET=[["instBot","Instant Bot Movement","Bots reply immediately, with no thinking delay or slide animation."],["instMove","Instant piece movement","Turns off slide and drop animations."],["hints","Show legal move hints","Dots and rings on squares you can move to."],["coords","Show board coordinates",""],["lastMove","Highlight last move",""]];
+const SET=[["lowDetail","Low Detail Mode","Switches back to the older, simpler look and runs faster on slower devices."],["instBot","Instant Bot Movement","Bots reply immediately, with no thinking delay or slide animation."],["instMove","Instant piece movement","Turns off slide and drop animations."],["hints","Show legal move hints","Dots and rings on squares you can move to."],["coords","Show board coordinates",""],["lastMove","Highlight last move",""]];
 /* ---------- Style: presets + custom ---------- */
 const BASE={hl:"#ffe63c",hla:.5,frm:"none",frc:"#000000",tex:"none",sq:false,ln:"",co:"#000000",set:"solid",w:"#ffffff",b:"#161616",ow:"",ob:"",gw:"",gb:"",bg:"#302e2b",bg2:"",pn:"#272522",ac:"#81b64c",hg:false};
 const PR={
@@ -420,11 +502,13 @@ $("sl").onclick=e=>{
 $("sl").oninput=e=>{const t=e.target;if(t.id=="tq"){$("tgrid").innerHTML=thGrid(t.value);return}if(t.dataset.c&&t.type=="color")editC(t.dataset.c,t.value)};
 $("sl").onchange=e=>{
   const t=e.target,k=t.dataset.k;
-  if(k){S[k]=t.checked;saveS();return}
+  if(k){S[k]=t.checked;if(k=="lowDetail")applyDetail();saveS();return}
   const c=t.dataset.c;if(!c)return;
   if(t.type=="checkbox")editT(c,t.checked);else if(t.tagName=="SELECT")editC(c,t.value);
 };
 applyTheme();
+function applyDetail(){const el=document.getElementById("polish");if(el)el.media=S.lowDetail?"not all":"all";document.body.classList.toggle("lowdetail",!!S.lowDetail)}
+applyDetail();
 
 function toggleFS(){const d=document,e=d.documentElement;try{if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const p=(e.requestFullscreen||e.webkitRequestFullscreen).call(e);if(p&&p.catch)p.catch(()=>{})}}catch(x){}}
 document.addEventListener("fullscreenchange",()=>{$("fsp").setAttribute("d",document.fullscreenElement?"M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5":"M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5")});
