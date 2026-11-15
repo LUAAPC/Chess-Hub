@@ -153,6 +153,19 @@ aside{background:var(--hpn);border:0;box-shadow:none}
 .hp .tg:last-of-type{border-bottom:0}
 @media(max-width:760px){.setrow{grid-template-columns:1fr}.hp.sel{position:static}.hrow{gap:20px}.hmain>.view:not([hidden]){gap:20px}}
 
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.cb{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;font-weight:600;font-size:14px;border:2px solid transparent;background:var(--hbt,rgba(255,255,255,.08))}
+.cb::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--cc)}
+.q button{display:flex;flex-direction:column;align-items:center}.q .qf{display:block;margin:0 auto 7px}.q .qf svg{width:42px;height:42px;border-radius:11px;box-shadow:0 0 0 2px var(--cc,transparent)}
+.cb small{opacity:.65;font-weight:500}.cb.on{border-color:var(--cc);background:rgba(255,255,255,.09)}
+.pb>span:last-child{min-width:0}.pb b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bi{width:44px;height:44px}.bi svg{border-radius:11px;box-shadow:0 0 0 2px var(--cc,transparent)}
+.sbi svg{margin:0 auto;border-radius:24px;box-shadow:0 0 0 3px var(--cc,transparent),0 8px 22px rgba(0,0,0,.4)}
+.sbc{text-align:center;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;margin-top:-6px}
+#pt{display:flex;align-items:center;gap:14px;margin:0;font-size:20px}
+.pface{flex:none;display:block;width:60px;height:60px}.pface svg{width:60px;height:60px;border-radius:17px;box-shadow:0 0 0 3px var(--cc,transparent),0 6px 16px rgba(0,0,0,.4)}
+.ptx{display:flex;flex-direction:column;min-width:0;gap:3px}.ptx b{font-size:20px;line-height:1.15;overflow:hidden;text-overflow:ellipsis}
+.ptx i{font-style:normal;font-weight:600;opacity:.75;font-size:16px}.ptx small{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
 </style>
 <style id="polish">
 /* ===== Visual polish (additive, no layout or behaviour changes) ===== */
@@ -232,6 +245,9 @@ input[type=range]{height:6px;cursor:pointer}
 #end,#cf,#pe{background:rgba(0,0,0,.62)}
 .eb{border-radius:20px;border:1px solid rgba(255,255,255,.1);box-shadow:0 12px 30px rgba(0,0,0,.5);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0) 50%),var(--hnv)}
 
+.pface svg{box-shadow:0 0 0 3px var(--cc,transparent),0 0 18px -2px var(--cc,transparent),0 6px 14px rgba(0,0,0,.4)}
+.sbi svg{box-shadow:0 0 0 3px var(--cc,transparent),0 0 26px -2px var(--cc,transparent),0 8px 22px rgba(0,0,0,.4)}
+.cb{transition:background .15s,border-color .15s,transform .1s}.cb:hover{transform:translateY(-1px)}
 /* keyboard focus */
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--hac,var(--ac));outline-offset:2px}
 </style>
@@ -254,7 +270,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 <section id="hub" class="view">
 <div class="hrow">
 <div class="hp"><h3>Play Bots</h3>
-<div class="q" id="hq"><button data-e="100">Easy<small>100</small></button><button data-e="600" class="on">Medium<small>600</small></button><button data-e="1000">Hard<small>1000</small></button></div>
+<div class="q" id="hq"></div>
 <button class="start" onclick="startFromHub()">Start Game</button>
 <button class="side" onclick="show('setup')"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:block"><circle cx="12" cy="6.5" r="3.6"/><path d="M8.2 19c0-4.2 1.4-6.2 3.8-6.2s3.8 2 3.8 6.2z"/><rect x="5.5" y="19" width="13" height="2.6" rx="1.3"/></svg></span>Choose a Bot</button>
 <button class="side" onclick="openLib()"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:block"><rect x="3.5" y="4" width="4.5" height="17" rx="1.2"/><rect x="9.5" y="6" width="4.5" height="15" rx="1.2"/><path d="m15.7 6.6 4-1.1 3 12.3-4 1.1z"/></svg></span>Game Library</button>
@@ -266,9 +282,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 
 <section id="setup" class="view" hidden>
 <div class="hrow setrow">
-<div class="hp"><h3>Choose a Bot</h3><div class="grid" id="pre"></div></div>
+<div class="hp"><h3>Choose a Bot</h3><div class="cats" id="cats"></div><div class="grid" id="pre"></div></div>
 <div class="hp sel">
-<div class="sbi" id="sbi">🤖</div><div class="sbn" id="sbn">Custom bot</div>
+<div class="sbi" id="sbi">🤖</div><div class="sbn" id="sbn">Custom bot</div><div class="sbc" id="sbc"></div>
 <div class="row" style="justify-content:center"><input type="number" id="ev" min="1" max="2850" value="1200" style="font:inherit;font-size:30px;font-weight:700;width:140px;padding:4px 8px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--fg);text-align:center"><span id="en" class="mut"></span></div>
 <input type="range" id="elo" min="1" max="2850" step="1" value="1200">
 <div class="mut" style="text-align:center">Drag the slider or type any rating from 1 to 2850. This small browser engine tops out around the 2000s, so the highest levels are its strongest setting.</div>
@@ -318,7 +334,39 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 <script>
 const $=id=>document.getElementById(id);
 const GL={k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"},TX="\uFE0E";
-const PRE=[["Random mover",1],["Pawn Pusher",25],["Sleepy Sam",50],["Oops Ollie",75],["First Timer",100],["Doodler",150],["Tinkerer",200],["Rookie",250],["Learner",325],["Beginner",400],["Student",500],["Novice",600],["Casual",800],["Social player",1000],["Club player",1200],["Intermediate",1500],["Advanced",1800],["Expert",2000],["Master",2300],["International Master",2500],["Grandmaster",2800],["Chess Titan",2830]];
+const CATS=[["Beginner",1,"#6fcf6a"],["Intermediate",550,"#4fb3ff"],["Advanced",1200,"#b58cff"],["Expert",1800,"#ffa24a"],["Master",2300,"#ff5d73"]];
+const PRE=[["Damian",1],["Mei",13],["Sebastian",26],["Klaus",38],["Wilhelm",50],["Sakura",62],["Wilma",74],["Nadia",87],["Antonio",100],["Violet",111],["Malik",124],["Paloma",136],["Pavel",148],["Lukas",160],["Orla",172],["Giulia",185],["Walter",197],["Martin",209],["Emma",222],["Natalia",234],["Yusuf",246],["Yasmin",258],["Bianca",270],["Karim",283],["Holly",295],["Fiona",307],["Kenji",320],["Lars",332],["Finn",344],["Felix",356],["Kavya",368],["Joy",381],["Ivy",393],["Luna",405],["Viktor",418],["Leo",430],["Rory",442],["Anjali",454],["Tariq",466],["Astrid",479],["Delia",491],["Ahmed",503],["Kofi",516],["Jasper",528],["Vera",540],["Lily",550],["Eddie",563],["Pablo",576],["Chloe",589],["Katya",600],["Wayne",615],["Pierre",628],["Nelson",641],["George",654],["Adrian",668],["Nikolai",681],["Teodor",694],["Jessa",707],["Mina",720],["Boris",733],["Mason",746],["Tobias",759],["Carlos",772],["Rocco",785],["Clara",798],["Opal",811],["Harvey",824],["Gia",837],["Antoine",850],["Arthur",863],["Hector",877],["Aisha",890],["Karin",903],["Rhea",916],["Anton",929],["Kwame",942],["Samira",955],["Leila",968],["Javier",981],["Jun",1000],["Jean",1007],["Vince",1020],["Wei",1033],["Grace",1046],["Maren",1059],["Tessa",1072],["Iris",1086],["Erik",1099],["Priya",1112],["Flora",1125],["Silas",1138],["Anders",1151],["Heidi",1164],["Eliza",1177],["Elena",1190],["Nora",1200],["Sofia",1213],["Joaquin",1227],["Ella",1240],["Amara",1254],["Adaeze",1267],["Axel",1280],["Otto",1294],["Gwen",1307],["Omar",1321],["Lucia",1334],["Dahlia",1348],["Frank",1361],["Paolo",1374],["Emil",1388],["Hiro",1401],["Ibrahim",1415],["Andre",1428],["Mira",1441],["Henrik",1455],["Amelia",1468],["Maya",1482],["Diego",1495],["Stefan",1508],["Emeka",1522],["Callum",1535],["Niko",1549],["Valentina",1562],["Lena",1575],["Nils",1589],["Ivan",1602],["Stella",1616],["Yuki",1629],["Henry",1642],["Dmitri",1656],["Willa",1669],["Cyrus",1683],["Jonas",1696],["Santiago",1710],["Nia",1723],["Nell",1736],["Idris",1750],["Samuel",1763],["Hugo",1777],["Tilda",1790],["Poppy",1800],["Declan",1814],["Louis",1829],["Oscar",1843],["Mia",1858],["Esme",1872],["Dana",1886],["Meera",1901],["Jia",1915],["Helena",1930],["Kaia",1944],["Benji",1959],["Hanna",1973],["Elani",1987],["Liam",2002],["Eva",2016],["Enzo",2031],["Ulrich",2045],["Zeke",2059],["Yara",2074],["Tatiana",2088],["Bruno",2103],["Will",2117],["Milo",2131],["Petra",2146],["Leif",2160],["June",2175],["Zara",2189],["Beatrice",2204],["Gemma",2218],["Dario",2232],["Ray",2247],["Luca",2261],["Fern",2276],["Irina",2290],["Theo",2300],["Vivian",2322],["Tom",2344],["Anya",2366],["Camila",2388],["Kasper",2410],["Ling",2432],["Arjun",2455],["Imogen",2477],["Daniel",2499],["Gus",2521],["Rafael",2543],["Mara",2565],["Thandi",2587],["Lucas",2609],["Raj",2631],["Vikram",2653],["Elijah",2675],["Oliver",2698],["Marco",2720],["Julian",2742],["Carmen",2764],["Rosa",2786],["Hazel",2808],["Mateo",2830]];
+function catOf(e){let c=0;CATS.forEach((x,i)=>{if(e>=x[1])c=i});return c}
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const SKINS=["#f6d3b3","#f1c9a5","#e8b88f","#d9a37a","#c68642","#a96f43","#8d5524","#6f4018","#f8dcc4","#e0ac69"],
+HCS=["#0e0e12","#2b1d16","#4a2f1c","#6b4a2f","#8a5a2b","#c98a3c","#e6c15a","#b5502b","#c0c0c8","#e8e8ee","#3a2a5a","#1f6f8b","#d94f8a","#3f8f5a"],
+HSS=["short","messy","slick","bob","long","sides","puffs","bun","pony","bald","short","messy"],
+BGS=["#aab2bb","#b9a27a","#8fa3b8","#d98c8c","#7fb59a","#c49ad6","#e0b25a","#6f9fd8","#d6805a","#8dc7c0","#b0b86a","#e08fb0","#7a8bd1","#c4a484","#5fa8a0","#d99a6c","#9a9ad6","#78b66e","#d66f6f","#6fb3d6","#c9b458","#a98bd6","#e09a7a","#7ec4a0"],
+SHS=["#7d8793","#8a7550","#5f7388","#b05f5f","#4f7f6a","#7a5fa8","#c28a2e","#3f6fb5","#b5603c","#4b9a94","#8a9a3f","#b24a7a","#4a58b0","#8a6f55","#c9c9d2","#2f7f4f"],
+SUITS=["#1b1b22","#23283a","#2d2230","#14202b","#2a2a2a","#2b2540"],TIES=["#e8b21a","#c0392b","#2c6fbb","#2e8b57","#8e44ad","#d6d6e0"],
+HATC=["#c0392b","#2c6fbb","#2e8b57","#8e44ad","#e8a21a","#222","#d4568a","#e6e6ee"];
+const SPEC={};
+function genSpec(i){
+  const r=rng(i*7919+12345),pk=a=>a[Math.floor(r()*a.length)],c=catOf(PRE[i][1]);
+  const kid=(c==0&&r()<.55)||(c==1&&r()<.12);
+  const b={bg:pk(BGS),sk:pk(SKINS),hs:pk(HSS),hc:pk(HCS),sh:pk(SHS),br:kid?"up":pk(["","up","thick"])};
+  b.m=pk(c<2?["wavy","smile","grin","open","smile"]:c<4?["smile","smirk","flat","smile","smirk","grin"]:["smirk","flat","smirk","smile"]);
+  if(kid){b.kid=1;if(r()<.6)b.bl=1}
+  else{
+    if(r()<[0,.1,.3,.55,.85][c]){b.suit=1;b.sh=pk(SUITS);b.tie=pk(TIES)}
+    const bd=r();if(bd<.13)b.beard="full";else if(bd<.3)b.beard="stubble";
+    if(r()<.12)b.must=1;
+  }
+  if(r()<[.08,.15,.25,.3,.3][c])b.gl=1;else if(r()<(c>=3?.14:.03))b.sun=1;
+  const h=r();let hat=null;
+  if(c==4){if(h<.4)hat="crown";else if(h<.5)hat="tophat"}
+  else if(c==3){if(h<.07)hat="tophat";else if(h<.12)hat="crown"}
+  else if(c<=1){if(h<.14)hat="cap";else if(h<.26)hat="beanie";else if(h<.31)hat="headband"}
+  else{if(h<.06)hat="cap";else if(h<.1)hat="headband"}
+  if(hat){b.hat=hat;b.hatc=pk(HATC);if(hat!="crown"&&hat!="headband"&&(b.hs=="bun"||b.hs=="puffs"||b.hs=="pony"))b.hs="short"}
+  return b;
+}
+function getSpec(i){i=Math.max(0,Math.min(PRE.length-1,i|0));return SPEC[i]||(SPEC[i]=genSpec(i))}
 let g=new Chess(),rv=new Chess(),G=g,mode="play",human="w",flip=false,sel=null,busy=false,arrows=[],circles=[],sans=[],idx=0,drag=null,rc=null,best=null,curId=null,timer=null,botName="Bot",anT=null,anTok=0;
 const ST={get(){try{return JSON.parse(localStorage.getItem("chessGames")||"[]")}catch(e){return[]}},set(a){try{localStorage.setItem("chessGames",JSON.stringify(a))}catch(e){}}};
 let curV="hub",prevV="hub";
@@ -512,33 +560,9 @@ applyDetail();
 
 function toggleFS(){const d=document,e=d.documentElement;try{if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const p=(e.requestFullscreen||e.webkitRequestFullscreen).call(e);if(p&&p.catch)p.catch(()=>{})}}catch(x){}}
 document.addEventListener("fullscreenchange",()=>{$("fsp").setAttribute("d",document.fullscreenElement?"M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5":"M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5")});
-function nameOf(e){const p=PRE.find(p=>p[1]==e);return p?p[0]:"Bot"}
-const BOT=[
-{bg:"#aab2bb",sk:"#f1c9a5",hs:"messy",hc:"#6b4a2f",m:"wavy",sh:"#7d8793",br:"up"},
-{bg:"#b9a27a",sk:"#f1c9a5",hs:"messy",hc:"#8a5a2b",m:"wavy",sh:"#8a7550",kid:1,br:"up"},
-{bg:"#8fa3b8",sk:"#d9a37a",hs:"short",hc:"#2b1d16",m:"flat",sh:"#5f7388",kid:1,br:"up"},
-{bg:"#d98c8c",sk:"#f6d3b3",hs:"messy",hc:"#c98a3c",m:"wavy",sh:"#b05f5f",kid:1,bl:1,br:"up"},
-{bg:"#81b64c",sk:"#f6d3b3",hs:"short",hc:"#c98a3c",m:"smile",sh:"#4a7c2a",kid:1,bl:1},
-{bg:"#9ccf6a",sk:"#8d5a3b",hs:"puffs",hc:"#1a1512",m:"smile",sh:"#69a23a",kid:1,bl:1},
-{bg:"#6cc4b0",sk:"#f1c9a5",hat:"beanie",hatc:"#e8749a",m:"smile",sh:"#3e9a86"},
-{bg:"#4cb39b",sk:"#8d5a3b",hs:"pony",hc:"#1f1a17",m:"smile",sh:"#2d7f6c",bl:1},
-{bg:"#58b4e8",sk:"#d9a37a",hs:"pony",hc:"#6b4a2f",m:"smile",sh:"#3a86b8",bl:1},
-{bg:"#3fa9d6",sk:"#f1c9a5",hat:"cap",hatc:"#d9453b",m:"smile",sh:"#2b78a0"},
-{bg:"#6f86e8",sk:"#f6d3b3",hs:"short",hc:"#2b1d16",gl:1,m:"smile",sh:"#4a5fbf"},
-{bg:"#5b8def",sk:"#d9a37a",hs:"bob",hc:"#2b1d16",m:"smile",sh:"#3a62b8",bl:1},
-{bg:"#7a6bdc",sk:"#e8b88f",hat:"beanie",hatc:"#f2c14e",beard:"stubble",hc:"#3b2a20",m:"smirk",sh:"#5648ad"},
-{bg:"#c07be0",sk:"#e8b88f",hat:"cap",hatc:"#3fa9d6",m:"smirk",sh:"#8f4cb0"},
-{bg:"#a95bd6",sk:"#f6d3b3",hs:"long",hc:"#7a3f1d",gl:1,m:"smile",sh:"#7c3aa6",bl:1},
-{bg:"#e8749a",sk:"#8d5a3b",hs:"short",hc:"#1a1512",beard:"full",m:"smile",sh:"#c04a74"},
-{bg:"#ef8a3c",sk:"#6b4430",hs:"puffs",hc:"#1a1512",m:"smile",sh:"#c4631b",bl:1},
-{bg:"#e8b21a",sk:"#f1c9a5",hs:"slick",hc:"#3b2a20",gl:1,m:"flat",suit:1,sh:"#3a3a44",tie:"#d9453b"},
-{bg:"#d9453b",sk:"#f6d3b3",hs:"bun",hc:"#cfcfd6",m:"smile",suit:1,sh:"#4a2a2a",tie:"#e8b21a",bl:1},
-{bg:"#3e7be0",sk:"#d9a37a",hs:"short",hc:"#8a8a92",beard:"full",gl:1,m:"smile",suit:1,sh:"#22304f",tie:"#e8b21a"},
-{bg:"#4a4f63",sk:"#f1c9a5",hs:"sides",hc:"#cfcfd6",must:1,m:"smirk",suit:1,sh:"#15151a",tie:"#3e7be0",br:"thick"},
-{bg:"#1b1c22",sk:"#e8b88f",hs:"slick",hc:"#0e0e12",sun:1,m:"smirk",suit:1,sh:"#0e0e12",tie:"#e8b21a",br:"thick"}
-];
+function nameOf(e){return PRE[tierIdx(e)][0]}
 function botSVG(i,s){
-  s=s||40;const b=BOT[i]||BOT[1],k="rgba(0,0,0,.35)",hc=b.hc||"#333";
+  s=s||40;const b=getSpec(i),k="rgba(0,0,0,.35)",hc=b.hc||"#333";
   let h='<svg width="'+s+'" height="'+s+'" viewBox="0 0 64 64" style="display:block"><rect width="64" height="64" rx="14" fill="'+b.bg+'"/>';
   const fringe='<path d="M17 30C15 12 25 8 32 8s17 4 15 22c-2-6-4-10-6-13-5 4-13 7-20 8z" fill="'+hc+'"/>';
   const short='<path d="M17.5 30C15 13 25 9 32 9s17 4 14.5 21c-1.5-6-3-10-6-11-5 3-13 3-18 0-3 1-4.5 5-5 11z" fill="'+hc+'"/>';
@@ -569,19 +593,40 @@ function botSVG(i,s){
   if(b.beard=="full")h+='<path d="M17.5 33c0 14 5 20 14.5 20s14.5-6 14.5-20c-2 5-3 6-6 6.5-3 .5-3-1-8.500-1s-5.500 1.500-8.500 1c-3-.5-4-1.500-6-6.500z" fill="'+hc+'"/>';
   if(b.beard=="stubble")h+='<path d="M18 34c1 8 6 12 14 12s13-4 14-12c-3 6-8 9-14 9s-11-3-14-9z" fill="#000" opacity=".18"/>';
   const mc=b.beard=="full"?"#f0c9bd":"#8a3a3a";
-  const M={smile:'M27 42.5q5 5 10 0',flat:'M28 43.500h8',smirk:'M28 43.500q5 1.500 9-1.500',wavy:'M26.500 43.500q2.500-2.500 5 0t5 0'};
+  const M={smile:'M27 42.5q5 5 10 0',flat:'M28 43.500h8',smirk:'M28 43.500q5 1.500 9-1.500',wavy:'M26.500 43.500q2.500-2.500 5 0t5 0',grin:'M26.500 42q5.500 6.500 11 0z',open:'M29 42.500q3 4.500 6 0z'};
   h+='<path d="'+M[b.m]+'" stroke="'+mc+'" stroke-width="2.2" fill="none" stroke-linecap="round"/>';
   if(b.must)h+='<path d="M24.500 41q3.500-3.500 7.500-.5 4-3 7.500.5-3.500 3-7.500 0-4 3-7.500 0z" fill="'+hc+'"/>';
   if(b.gl)h+='<circle cx="26" cy="32" r="5.800" fill="rgba(255,255,255,.18)" stroke="#222" stroke-width="1.800"/><circle cx="38" cy="32" r="5.800" fill="rgba(255,255,255,.18)" stroke="#222" stroke-width="1.800"/><path d="M31.800 31.500h.4" stroke="#222" stroke-width="1.800"/>';
   if(b.sun)h+='<rect x="19.500" y="28" width="11.500" height="8" rx="3" fill="#15151a"/><rect x="33" y="28" width="11.500" height="8" rx="3" fill="#15151a"/><path d="M31 31h2" stroke="#15151a" stroke-width="2"/><path d="M22 30l4 0" stroke="rgba(255,255,255,.35)" stroke-width="1.200"/>';
   if(b.hat=="cap")h+='<path d="M17 27C17 10 27 7 32 7s15 3 15 20z" fill="'+b.hatc+'"/><rect x="14" y="25" width="36" height="4" rx="2" fill="rgba(0,0,0,.28)"/><path d="M14 27h36q5 0 8 4H14z" fill="'+b.hatc+'" opacity="0"/>';
   if(b.hat=="beanie")h+='<path d="M16.500 26C16 8 26 5 32 5s16 3 15.500 21z" fill="'+b.hatc+'"/><rect x="15.500" y="22" width="33" height="6" rx="3" fill="rgba(0,0,0,.18)"/><circle cx="32" cy="4.500" r="3.200" fill="'+b.hatc+'"/>';
+  if(b.hat=="headband")h+='<path d="M17.500 22q14.500-9 29 0v3.500q-14.500-9-29 0z" fill="'+b.hatc+'"/>';
+  if(b.hat=="tophat")h+='<rect x="23" y="0" width="18" height="14" rx="2" fill="#1a1a22"/><rect x="23" y="9" width="18" height="3" fill="'+b.hatc+'"/><rect x="15" y="13" width="34" height="3.500" rx="1.750" fill="#1a1a22"/>';
+  if(b.hat=="crown")h+='<path d="M20 15l2-10 6 5 4-8 4 8 6-5 2 10z" fill="#f5c518" stroke="#b8860b" stroke-width="1.200" stroke-linejoin="round"/><circle cx="32" cy="10" r="1.600" fill="#e0245e"/>';
   return h+"</svg>";
 }
 function flame(c){return '<svg width="22" height="33" viewBox="7 2 10 15.2" style="display:block"><path d="M12 2c.7 3.3 5 5.4 5 10.2a5 5 0 0 1-10 0c0-2.1.9-3.5 2-4.6.3 1.4 1 2.1 1.7 2.4C10.6 7.8 11.2 4.8 12 2z" fill="'+c+'"/></svg>'}
 function tierIdx(e){return Math.max(0,PRE.reduce((a,p,j)=>p[1]<=e?j:a,0))}
-function eloUI(){const e=+$("elo").value,i=PRE.findIndex(p=>p[1]==e);$("ev").value=e;$("en").textContent="";$("sbi").innerHTML=botSVG(i>=0?i:tierIdx(e),90);$("sbn").textContent=i>=0?PRE[i][0]:"Custom bot";document.querySelectorAll("#pre button").forEach(b=>b.classList.toggle("on",+b.dataset.e==e))}
-$("pre").innerHTML=PRE.map((p,i)=>`<button class="pb" data-e="${p[1]}"><span class="bi">${botSVG(i,42)}</span><span><b>${p[0]}</b><small>${p[1]}</small></span></button>`).join("");
+let botCat=-1;
+function botBtn(p,i){const c=CATS[catOf(p[1])];return `<button class="pb" data-e="${p[1]}" title="${p[0]}" style="--cc:${c[2]}"><span class="bi">${botSVG(i,42)}</span><span><b>${p[0]}</b><small>${p[1]}</small></span></button>`}
+function renderBots(){
+  $("cats").innerHTML=CATS.map((c,i)=>`<button class="cb${i==botCat?" on":""}" data-c="${i}" style="--cc:${c[2]}">${c[0]}<small>${PRE.filter(p=>catOf(p[1])==i).length}</small></button>`).join("");
+  $("pre").innerHTML=PRE.map((p,i)=>catOf(p[1])==botCat?botBtn(p,i):"").join("");
+  const e=+$("elo").value;document.querySelectorAll("#pre button").forEach(b=>b.classList.toggle("on",+b.dataset.e==e));
+}
+function eloUI(){
+  const e=+$("elo").value,i=PRE.findIndex(p=>p[1]==e),k=i>=0?i:tierIdx(e),c=catOf(e);
+  $("ev").value=e;$("en").textContent="";
+  $("sbi").style.setProperty("--cc",CATS[c][2]);$("sbi").innerHTML=botSVG(k,96);
+  $("sbn").textContent=PRE[k][0];
+  $("sbc").textContent=CATS[c][0];$("sbc").style.color=CATS[c][2];
+  if(c!=botCat){botCat=c;renderBots()}
+  document.querySelectorAll("#pre button").forEach(b=>b.classList.toggle("on",+b.dataset.e==e));
+}
+function renderQuick(){$("hq").innerHTML=[100,600,1000].map(e=>{const i=PRE.findIndex(p=>p[1]==e),c=CATS[catOf(e)];return `<button data-e="${e}"${e==600?' class="on"':''} style="--cc:${c[2]}"><span class="qf">${botSVG(i,42)}</span>${PRE[i][0]}<small>${e}</small></button>`}).join("")}
+renderQuick();
+$("cats").onclick=e=>{const b=e.target.closest("button");if(b){botCat=+b.dataset.c;renderBots()}};
+function ptHTML(e){const i=PRE.findIndex(p=>p[1]==e),k=i>=0?i:tierIdx(e),c=CATS[catOf(e)];return `<span class="pface" style="--cc:${c[2]}">${botSVG(k,60)}</span><span class="ptx"><b>${PRE[k][0]} <i>(${e})</i></b><small style="color:${c[2]}">${c[0]}</small></span>`}
 $("pre").onclick=e=>{const b=e.target.closest("button");if(b){$("elo").value=b.dataset.e;eloUI()}};
 $("elo").oninput=eloUI;eloUI();
 $("ev").oninput=()=>{const v=Math.max(1,Math.min(2850,Math.round(+$("ev").value)||1)),t=$("ev").value;$("elo").value=v;eloUI();$("ev").value=t};$("ev").onchange=eloUI;
@@ -786,7 +831,7 @@ function startGame(){
   human=rematchSide||(s=="r"?(Math.random()<.5?"w":"b"):s);rematchSide=null;
   botName=nameOf(+$("elo").value)+" ("+$("elo").value+")";
   g.reset();G=g;mode="play";endShown=false;resigned=false;flagged=null;gtok++;engReset();gameElo=+$("elo").value;usedUndo=false;rt=null;$("end").hidden=true;sel=null;busy=false;flip=human=="b";arrows=[];circles=[];curId=null;
-  $("gn").value="Game vs "+botName;$("sm").textContent="";$("pt").textContent="vs "+botName;
+  $("gn").value="Game vs "+botName;$("sm").textContent="";$("pt").innerHTML=ptHTML(+$("elo").value);
   $("pPlay").hidden=false;$("pRev").hidden=true;$("evw").hidden=true;
   show("game");render();if(human=="b")botTurn();
 }
