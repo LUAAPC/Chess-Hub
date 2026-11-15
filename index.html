@@ -28,7 +28,7 @@ input[type=range]{width:100%;accent-color:var(--ac)}input[type=text]{font:inheri
 .big{font-size:34px;font-weight:700}.mut{color:var(--mut);font-size:13px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px 0;border-bottom:1px solid var(--bd)}
 .gl{display:flex;flex-wrap:wrap;gap:32px;justify-content:center;align-items:flex-start}
-.bw{--s:min(calc(100vw - 72px),82vh,760px)}#game.hasck .bw{--s:min(calc(100vw - 72px),calc(82vh - 100px),760px)}#bx{display:flex;gap:12px}
+.bw{--s:min(calc(100vw - 72px),82vh,760px)}#bx{display:flex;gap:12px}
 #evw{width:18px;flex:none;align-self:flex-start;height:var(--s);position:relative;background:#262626;border-radius:5px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}#evb{position:absolute;left:0;right:0;bottom:0;height:50%;background:#f4f4f4;transition:height .45s ease}#evw::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(128,128,128,.7)}
 #bd{position:relative;width:var(--s);height:var(--s)}
 #board{width:100%;height:100%;display:grid;grid-template:repeat(8,minmax(0,1fr))/repeat(8,minmax(0,1fr));border-radius:var(--br,6px);overflow:hidden;box-shadow:var(--bsh,0 4px 18px rgba(0,0,0,.25));touch-action:none;user-select:none}
@@ -152,13 +152,6 @@ aside{background:var(--hpn);border:0;box-shadow:none}
 .hrw button.p{background:var(--hac);color:var(--hacf)}
 .hp .tg:last-of-type{border-bottom:0}
 @media(max-width:760px){.setrow{grid-template-columns:1fr}.hp.sel{position:static}.hrow{gap:20px}.hmain>.view:not([hidden]){gap:20px}}
-.ck{width:var(--s);max-width:100%;display:flex;justify-content:space-between;align-items:center;margin:8px 0;gap:10px}.ck[hidden]{display:none}
-.ck span{font-weight:600;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ck b{font:700 24px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:7px 12px;border-radius:7px;background:var(--hbt,rgba(255,255,255,.08));color:var(--fg);min-width:96px;text-align:center}
-.ck.act b{background:var(--ac);color:var(--hacf,#fff)}.ck.low b{background:#c0392b;color:#fff}
-.tcbox .q{margin-bottom:8px}.tcbox .q button{padding:8px 4px;font-size:14px}
-.tcc{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:0 0 12px}
-.tcc input{width:66px;font:inherit;padding:6px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--fg);text-align:center}
 </style>
 </head>
 <body>
@@ -180,7 +173,6 @@ aside{background:var(--hpn);border:0;box-shadow:none}
 <div class="hrow">
 <div class="hp"><h3>Play Bots</h3>
 <div class="q" id="hq"><button data-e="100">Easy<small>100</small></button><button data-e="600" class="on">Medium<small>600</small></button><button data-e="1000">Hard<small>1000</small></button></div>
-<h3 style="margin:2px 0 8px">Time</h3><div class="tcbox"></div>
 <button class="start" onclick="startFromHub()">Start Game</button>
 <button class="side" onclick="show('setup')"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:block"><circle cx="12" cy="6.5" r="3.6"/><path d="M8.2 19c0-4.2 1.4-6.2 3.8-6.2s3.8 2 3.8 6.2z"/><rect x="5.5" y="19" width="13" height="2.6" rx="1.3"/></svg></span>Choose a Bot</button>
 <button class="side" onclick="openLib()"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:block"><rect x="3.5" y="4" width="4.5" height="17" rx="1.2"/><rect x="9.5" y="6" width="4.5" height="15" rx="1.2"/><path d="m15.7 6.6 4-1.1 3 12.3-4 1.1z"/></svg></span>Game Library</button>
@@ -200,7 +192,6 @@ aside{background:var(--hpn);border:0;box-shadow:none}
 <div class="mut" style="text-align:center">Drag the slider or type any rating from 1 to 2850. This small browser engine tops out around the 2000s, so the highest levels are its strongest setting.</div>
 <h3 style="margin:10px 0 0">You play</h3>
 <div class="seg" id="sides"><button data-s="w" class="on">White</button><button data-s="r">Random</button><button data-s="b">Black</button></div>
-<h3 style="margin:10px 0 8px">Time</h3><div class="tcbox"></div>
 <button class="start" style="margin:8px 0 0" onclick="startGame()">Start Game</button>
 </div>
 </div>
@@ -219,7 +210,7 @@ aside{background:var(--hpn);border:0;box-shadow:none}
 
 <section id="game" class="view" hidden>
 <div class="gl">
-<div class="bw"><div class="ck" id="ckT" hidden><span></span><b></b></div><div id="bx"><div id="evw" hidden><div id="evb"></div></div><div id="bd"><div id="board"></div><svg id="ov" viewBox="0 0 8 8"></svg></div></div><div class="ck" id="ckB" hidden><span></span><b></b></div><div id="st"></div></div>
+<div class="bw"><div id="bx"><div id="evw" hidden><div id="evb"></div></div><div id="bd"><div id="board"></div><svg id="ov" viewBox="0 0 8 8"></svg></div></div><div id="st"></div></div>
 <aside>
 <h2 id="pt"></h2>
 <div id="pPlay" class="row"><button onclick="undo()">Undo</button><button onclick="flipB()">Flip</button><button onclick="startGame()">New</button>
@@ -252,7 +243,7 @@ let curV="hub",prevV="hub";
 function show(v){if(v=="settings")prevV=curV;curV=v;document.body.classList.toggle("hubmode",v!="game");$("shell").hidden=v=="game";if(v!="game")renderHub();document.querySelectorAll(".view").forEach(e=>e.hidden=e.id!=v);document.querySelectorAll(".ni").forEach(b=>b.classList.toggle("act",b.dataset.v==v))}
 const DEF={instBot:true,instMove:false,hints:true,coords:true,lastMove:true,theme:"arcade"};
 let S=Object.assign({},DEF,(()=>{try{return JSON.parse(localStorage.getItem("chessSet")||"{}")}catch(e){return{}}})());
-const SET=[["instMove","Instant piece movement","Turns off slide and drop animations."],["hints","Show legal move hints","Dots and rings on squares you can move to."],["coords","Show board coordinates",""],["lastMove","Highlight last move",""]];
+const SET=[["instBot","Instant Bot Movement","Bots reply immediately, with no thinking delay or slide animation."],["instMove","Instant piece movement","Turns off slide and drop animations."],["hints","Show legal move hints","Dots and rings on squares you can move to."],["coords","Show board coordinates",""],["lastMove","Highlight last move",""]];
 /* ---------- Style: presets + custom ---------- */
 const BASE={hl:"#ffe63c",hla:.5,frm:"none",frc:"#000000",tex:"none",sq:false,ln:"",co:"#000000",set:"solid",w:"#ffffff",b:"#161616",ow:"",ob:"",gw:"",gb:"",bg:"#302e2b",bg2:"",pn:"#272522",ac:"#81b64c",hg:false};
 const PR={
@@ -550,7 +541,7 @@ function render(){
   if(fin&&!endShown){endShown=true;rate();setTimeout(()=>{if(mode=="play"&&(g.game_over()||resigned||flagged)&&!$("game").hidden)showEnd()},S.instMove?250:1000)}
   const hs=mode=="play"?G.history():sans,cur=mode=="play"?hs.length:idx;let m="";
   hs.forEach((s,i)=>{if(i%2==0)m+=`<span class="n">${i/2+1}.</span>`;m+=`<span class="m${i+1==cur&&mode=="review"?" cur":""}" data-i="${i}">${s}</span>`});
-  $("moves").innerHTML=m;$("moves").className=mode=="review"?"rv":"";$("moves").scrollTop=1e5;paintClocks();
+  $("moves").innerHTML=m;$("moves").className=mode=="review"?"rv":"";$("moves").scrollTop=1e5;
 }
 function tryMove(from,to,dr){
   const m=G.moves({square:from,verbose:true}).find(m=>m.to==to);
@@ -560,7 +551,7 @@ function tryMove(from,to,dr){
 }
 function doMove(from,to,pr,dr){
   if(flagged||resigned)return;
-  G.move({from,to,promotion:pr});clkMoved();touchDay();anim=dr?"drop":"slide";sel=null;arrows=[];circles=[];render();
+  G.move({from,to,promotion:pr});touchDay();anim=dr?"drop":"slide";sel=null;arrows=[];circles=[];render();
   if(!G.game_over()&&!flagged)botTurn();
 }
 let promoEl=null;
@@ -657,38 +648,15 @@ function botTurn(){
   setTimeout(()=>{
     if(tk!=gtok||flagged)return;
     const t0=Date.now(),elo=+$("elo").value,ms=g.moves({verbose:true});let m;
-    const bc=human=="w"?"b":"w",cap=x=>CK.on?Math.min(x,Math.max(60,CK[bc]/30)):x;
     if(elo<=1||Math.random()<Math.max(0,1-(elo-1)/1000))m=ms[Math.floor(Math.random()*ms.length)];
-    else m=think(g,elo<700?1:elo<1100?2:elo<1600?3:4,Math.max(0,(2000-elo)/5),cap(elo<1600?1500:2800)).m;
-    const dl=CK.on?Math.min(1000+Math.random()*4000,Math.max(250,CK[bc]/10)):1000+Math.random()*4000,w=Math.max(0,dl-(Date.now()-t0));
-    setTimeout(()=>{if(tk!=gtok||flagged)return;g.move(m);clkMoved();anim="slide";busy=false;render()},w);
-  },60);
+    else m=think(g,elo<700?1:elo<1100?2:elo<1600?3:4,Math.max(0,(2000-elo)/5),elo<1600?1500:2800).m;
+    const inst=!!S.instBot,w=inst?0:Math.max(0,1000+Math.random()*4000-(Date.now()-t0));
+    const play=()=>{if(tk!=gtok||flagged)return;g.move(m);anim=inst?null:"slide";busy=false;render()};
+    if(inst)play();else setTimeout(play,w);
+  },S.instBot?0:60);
 }
 
-/* ---------- Time control & clocks ---------- */
-const TCP=[["No clock",0,0],["1 min",1,0],["3 min",3,0],["3 | 2",3,2],["5 min",5,0],["5 | 3",5,3],["10 min",10,0],["15 | 10",15,10],["30 min",30,0]];
-let TC=(()=>{try{const t=JSON.parse(localStorage.getItem("chessTC")||"null");if(t&&t.m>=0&&t.i>=0)return{m:+t.m,i:+t.i}}catch(e){}return{m:0,i:0}})();
-let CK={on:false,w:0,b:0,inc:0,t:0},flagged=null,gtok=0;
-function saveTC(){try{localStorage.setItem("chessTC",JSON.stringify(TC))}catch(e){}}
-function tcName(t){return t.m?t.m+" min"+(t.i?" + "+t.i+" sec":""):"No clock"}
-function tcCat(m,i){const t=m+i*40/60;return!m?"Untimed":t<3?"Bullet":t<10?"Blitz":t<=30?"Rapid":"Classical"}
-function renderTC(){
-  const h='<div class="q">'+TCP.map(p=>`<button class="tcb" data-m="${p[1]}" data-i="${p[2]}">${p[0]}<small>${tcCat(p[1],p[2])}</small></button>`).join("")+'</div><div class="tcc"><span class="mut">Custom</span><input class="tcm" type="number" min="1" max="180" placeholder="min"><span class="mut">+</span><input class="tci" type="number" min="0" max="60" placeholder="sec"><button class="tcset">Set</button></div>';
-  document.querySelectorAll(".tcbox").forEach(b=>b.innerHTML=h);paintTC();
-}
-function paintTC(){
-  const pre=TCP.some(p=>p[1]==TC.m&&p[2]==TC.i);
-  document.querySelectorAll(".tcb").forEach(b=>b.classList.toggle("on",+b.dataset.m==TC.m&&+b.dataset.i==TC.i));
-  document.querySelectorAll(".tcc").forEach(c=>{const m=c.querySelector(".tcm"),i=c.querySelector(".tci");if(document.activeElement!==m&&document.activeElement!==i){m.value=pre?"":TC.m;i.value=pre?"":TC.i}});
-}
-document.addEventListener("click",e=>{
-  const b=e.target.closest(".tcb");
-  if(b){TC={m:+b.dataset.m,i:+b.dataset.i};saveTC();paintTC();return}
-  const st=e.target.closest(".tcset");
-  if(st){const bx=st.closest(".tcc"),m=Math.round(+bx.querySelector(".tcm").value),i=Math.round(+bx.querySelector(".tci").value||0);if(m>=1&&m<=180){TC={m,i:Math.max(0,Math.min(60,i))};saveTC();paintTC()}}
-});
-document.addEventListener("keydown",e=>{if(e.key=="Enter"&&e.target.closest&&e.target.closest(".tcc")){const s=e.target.closest(".tcc").querySelector(".tcset");if(s)s.click()}});
-renderTC();
+let flagged=null,gtok=0;
 function ended(){return g.game_over()||resigned||!!flagged}
 function canMate(c){let n=0;for(const r of g.board())for(const p of r)if(p&&p.color==c){if(p.type=="p"||p.type=="r"||p.type=="q")return true;if(p.type=="n"||p.type=="b")n++}return n>=2}
 function outcome(){
@@ -697,51 +665,14 @@ function outcome(){
   if(g.in_checkmate())return g.turn()!=human?"win":"lose";
   return"draw";
 }
-function fmtT(ms){
-  ms=Math.max(0,ms);const s=ms/1000,pad=n=>(n<10?"0":"")+n;
-  if(s<10)return"0:0"+(Math.floor(s*10)/10).toFixed(1);
-  const h=Math.floor(s/3600),m=Math.floor(s%3600/60),sc=Math.floor(s%60);
-  return h?h+":"+pad(m)+":"+pad(sc):m+":"+pad(sc);
-}
-function paintClocks(){
-  const on=CK.on&&mode=="play";
-  $("ckT").hidden=$("ckB").hidden=!on;$("game").classList.toggle("hasck",on);
-  if(!on)return;
-  const top=flip?"w":"b",bot=flip?"b":"w",run=!ended()&&g.history().length>=2;
-  [["ckT",top],["ckB",bot]].forEach(([id,c])=>{
-    const el=$(id);el.querySelector("span").textContent=c==human?"You":botName;
-    el.querySelector("b").textContent=fmtT(CK[c]);
-    el.classList.toggle("act",run&&g.turn()==c);
-    el.classList.toggle("low",CK[c]<=0||(CK[c]<10000&&!ended()));
-  });
-}
-function flagTime(c){
-  if(flagged||ended())return;
-  flagged=c;busy=false;sel=null;CK[c]=0;
-  if(typeof promoEl!=="undefined"&&promoEl)closePromo();
-  render();
-}
-function clkMoved(){ /* call right after a move is played */
-  if(!CK.on)return;
-  const mover=g.turn()=="w"?"b":"w",n=g.history().length,now=Date.now(),d=now-CK.t;CK.t=now;
-  if(n>2){CK[mover]-=d;if(CK[mover]<=0){flagTime(mover);return}CK[mover]+=CK.inc}
-}
-setInterval(()=>{
-  if(!CK.on||mode!="play"){CK.t=Date.now();return}
-  const now=Date.now(),d=now-CK.t;CK.t=now;
-  if(ended()||g.history().length<2){paintClocks();return}
-  const c=g.turn();CK[c]-=d;
-  if(CK[c]<=0){flagTime(c);return}
-  paintClocks();
-},100);
 
 /* ---------- Game flow ---------- */
 function startGame(){
   const s=document.querySelector("#sides .on").dataset.s;
   human=rematchSide||(s=="r"?(Math.random()<.5?"w":"b"):s);rematchSide=null;
   botName=nameOf(+$("elo").value)+" ("+$("elo").value+")";
-  g.reset();G=g;mode="play";endShown=false;resigned=false;flagged=null;gtok++;CK={on:!!TC.m,w:TC.m*60000,b:TC.m*60000,inc:TC.i*1000,t:Date.now()};gameElo=+$("elo").value;usedUndo=false;rt=null;$("end").hidden=true;sel=null;busy=false;flip=human=="b";arrows=[];circles=[];curId=null;
-  $("gn").value="Game vs "+botName;$("sm").textContent="";$("pt").textContent="vs "+botName+(TC.m?" · "+tcName(TC):"");
+  g.reset();G=g;mode="play";endShown=false;resigned=false;flagged=null;gtok++;gameElo=+$("elo").value;usedUndo=false;rt=null;$("end").hidden=true;sel=null;busy=false;flip=human=="b";arrows=[];circles=[];curId=null;
+  $("gn").value="Game vs "+botName;$("sm").textContent="";$("pt").textContent="vs "+botName;
   $("pPlay").hidden=false;$("pRev").hidden=true;$("evw").hidden=true;
   show("game");render();if(human=="b")botTurn();
 }
