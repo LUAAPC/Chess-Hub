@@ -977,6 +977,39 @@ function ev(G){
   for(let f=0;f<8;f++){s-=12*Math.max(0,pf.w[f]-1);s+=12*Math.max(0,pf.b[f]-1)}
   return s;
 }
+/* Smarter evaluation: piece-square tables, passed/doubled pawns, rooks on open files, bishop pair, king safety by phase.
+   (This definition replaces the simple one above; PST lives on V so it is copied into the worker with V.) */
+V.pst={
+p:[0,0,0,0,0,0,0,0,50,50,50,50,50,50,50,50,10,10,20,30,30,20,10,10,5,5,10,25,25,10,5,5,0,0,0,20,20,0,0,0,5,-5,-10,0,0,-10,-5,5,5,10,10,-20,-20,10,10,5,0,0,0,0,0,0,0,0],
+n:[-50,-40,-30,-30,-30,-30,-40,-50,-40,-20,0,0,0,0,-20,-40,-30,0,10,15,15,10,0,-30,-30,5,15,20,20,15,5,-30,-30,0,15,20,20,15,0,-30,-30,5,10,15,15,10,5,-30,-40,-20,0,5,5,0,-20,-40,-50,-40,-30,-30,-30,-30,-40,-50],
+b:[-20,-10,-10,-10,-10,-10,-10,-20,-10,0,0,0,0,0,0,-10,-10,0,5,10,10,5,0,-10,-10,5,5,10,10,5,5,-10,-10,0,10,10,10,10,0,-10,-10,10,10,10,10,10,10,-10,-10,5,0,0,0,0,5,-10,-20,-10,-10,-10,-10,-10,-10,-20],
+r:[0,0,0,0,0,0,0,0,5,10,10,10,10,10,10,5,-5,0,0,0,0,0,0,-5,-5,0,0,0,0,0,0,-5,-5,0,0,0,0,0,0,-5,-5,0,0,0,0,0,0,-5,-5,0,0,0,0,0,0,-5,0,0,0,5,5,0,0,0],
+q:[-20,-10,-10,-5,-5,-10,-10,-20,-10,0,0,0,0,0,0,-10,-10,0,5,5,5,5,0,-10,-5,0,5,5,5,5,0,-5,0,0,5,5,5,5,0,-5,-10,5,5,5,5,5,0,-10,-10,0,5,0,0,0,0,-10,-20,-10,-10,-5,-5,-10,-10,-20],
+k:[-30,-40,-40,-50,-50,-40,-40,-30,-30,-40,-40,-50,-50,-40,-40,-30,-30,-40,-40,-50,-50,-40,-40,-30,-30,-40,-40,-50,-50,-40,-40,-30,-20,-30,-30,-40,-40,-30,-30,-20,-10,-20,-20,-20,-20,-20,-20,-10,20,20,0,0,0,0,20,20,20,30,10,0,0,10,30,20],
+e:[-50,-40,-30,-20,-20,-30,-40,-50,-30,-20,-10,0,0,-10,-20,-30,-30,-10,20,30,30,20,-10,-30,-30,-10,30,40,40,30,-10,-30,-30,-10,30,40,40,30,-10,-30,-30,-10,20,30,30,20,-10,-30,-30,-30,0,0,0,0,-30,-30,-50,-30,-30,-30,-30,-30,-30,-50]
+};
+function ev(G){
+  const b=G.board(),P=V.pst;let s=0,npm=0,bw=0,bb=0;
+  const pw=[0,0,0,0,0,0,0,0],pbn=[0,0,0,0,0,0,0,0],minB=[9,9,9,9,9,9,9,9],maxW=[-1,-1,-1,-1,-1,-1,-1,-1];
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=b[r][c];if(!p)continue;
+    if(p.type=="p"){if(p.color=="w"){pw[c]++;if(r>maxW[c])maxW[c]=r}else{pbn[c]++;if(r<minB[c])minB[c]=r}}
+    else if(p.type!="k")npm+=V[p.type]}
+  const eg=npm<2600;
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=b[r][c];if(!p)continue;
+    const t=p.type,w=p.color=="w",i=w?r*8+c:(7-r)*8+c;
+    let v=V[t]+(t=="k"?(eg?P.e[i]:P.k[i]):P[t][i]);
+    if(t=="b"){if(w)bw++;else bb++}
+    if(t=="p"){
+      if(w){let ps=true;for(let f=Math.max(0,c-1);f<=Math.min(7,c+1);f++)if(minB[f]<r){ps=false;break}
+        if(ps){const a=6-r;v+=10+a*a*4}if(pw[c]>1)v-=10}
+      else{let ps=true;for(let f=Math.max(0,c-1);f<=Math.min(7,c+1);f++)if(maxW[f]>r){ps=false;break}
+        if(ps){const a=r-1;v+=10+a*a*4}if(pbn[c]>1)v-=10}
+    }else if(t=="r"){const own=w?pw[c]:pbn[c],opp=w?pbn[c]:pw[c];if(!own)v+=opp?8:15}
+    s+=w?v:-v;
+  }
+  if(bw>1)s+=30;if(bb>1)s-=30;
+  return s;
+}
 function order(ms){for(const m of ms)m.o=(m.captured?10*V[m.captured]-V[m.piece]+1000:0)+(m.promotion?800:0);return ms.sort((a,b)=>b.o-a.o)}
 let deadline=0,timeUp=false,nodes=0;
 function qs(G,a,b,ply){
@@ -1043,11 +1076,11 @@ engInit();
 
 const LV=[{e:250,sk:0,d:1,rand:.55},{e:500,sk:0,d:1,rand:.25},{e:800,sk:1,d:2,rand:.1},{e:1200,sk:3,d:3,rand:0},{e:1600,sk:6,d:5,rand:0},{e:2000,sk:10,d:8,rand:0},{e:2500,sk:16,d:0,mt:600,rand:0},{e:3200,sk:20,d:0,mt:2000,rand:0}];
 function cfgOf(e){return LV.reduce((a,c)=>Math.abs(c.e-e)<Math.abs(a.e-e)?c:a)}
-let curO=null,lastO=null,CFG=null,sf=null,sfRes=null,sfFail=false,sfSkip=0;
+let curO=null,lastO=null,CFG=null,sf=null,sfRes=null,sfFail=false,sfSkip=0,sfReady=false;
 function sfInit(){
   try{
     const w=new Worker(URL.createObjectURL(new Blob(["importScripts('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js');"],{type:"text/javascript"})));
-    w.onmessage=e=>{const l=typeof e.data=="string"?e.data:"";if(l.indexOf("bestmove")!=0)return;
+    w.onmessage=e=>{const l=typeof e.data=="string"?e.data:"";if(l.indexOf("readyok")==0){sfReady=true;return}if(l.indexOf("bestmove")!=0)return;
       if(sfSkip>0){sfSkip--;return}
       const t=l.split(" ")[1],r=sfRes;if(!r)return;sfRes=null;
       r(t&&t!="(none)"?{from:t.slice(0,2),to:t.slice(2,4),promotion:t[4]}:null)};
@@ -1057,10 +1090,10 @@ function sfInit(){
 }
 function sfCancel(){if(sfRes){const r=sfRes;sfRes=null;sfSkip++;if(sf)sf.postMessage("stop");r(null)}}
 function sfMove(fen,c,cap){
-  if(!sf||sfFail)return Promise.resolve(null);
+  if(!sf||sfFail||!sfReady)return Promise.resolve(null);
   return new Promise(res=>{
     const done=m=>{clearTimeout(tm);if(sfRes===done)sfRes=null;res(m)};
-    const tm=setTimeout(()=>{sfFail=true;done(null)},(c.mt||3000)+15000);
+    const tm=setTimeout(()=>{sfSkip++;try{sf.postMessage("stop")}catch(e){}done(null)},(cap||c.mt||1200)+3000);
     sfRes=done;
     sf.postMessage("setoption name Skill Level value "+c.sk);
     sf.postMessage("position fen "+fen);
@@ -1073,15 +1106,16 @@ function botTurn(){
   setTimeout(async()=>{
     if(tk!=gtok||flagged)return;
     const t0=Date.now(),elo=curO.elo,ms=g.moves({verbose:true}),bcol=human=="w"?"b":"w",capMs=tc?Math.max(80,Math.min(1200,clk[bcol]/25)):0;let m=null;
-    if(Math.random()<CFG.rand)m=ms[Math.floor(Math.random()*ms.length)];
+    if(ms.length==1)m=ms[0];
+    else if(Math.random()<CFG.rand)m=ms[Math.floor(Math.random()*ms.length)];
     else{
-      m=await sfMove(g.fen(),CFG,capMs);
+      if((curO.sf||elo>=1000)&&sfReady)m=await sfMove(g.fen(),CFG,capMs);
       if(tk!=gtok||flagged)return;
-      if(!m){const r=await thinkAsync(g,elo<700?2:elo<1100?3:elo<1600?4:5,Math.max(0,(2000-elo)/5),capMs?Math.min(capMs,2500):(S.think?(elo<1600?2500:6000):400));m=r&&r.m}
+      if(!m){const r=await thinkAsync(g,elo<500?1:elo<800?2:elo<1200?3:elo<1700?4:elo<2200?5:6,Math.max(0,(1800-elo)/6),Math.min(capMs||1e9,elo<900?250:elo<1400?600:elo<1900?1100:1800));m=r&&r.m}
     }
     if(tk!=gtok||flagged)return;
     if(!m)m=ms[0];
-    const inst=!S.think,w=inst?0:Math.min(tc?Math.max(100,clk[bcol]/20):1e9,Math.max(0,800+Math.random()*3500-(Date.now()-t0)));
+    const inst=!S.think,w=inst?0:Math.min(tc?Math.max(100,clk[bcol]/20):1e9,Math.max(0,(ms.length==1?150:(g.history().length<8?.5:1)*(elo<600?350+Math.random()*800:elo<1200?500+Math.random()*1200:700+Math.random()*1600))-(Date.now()-t0)));
     const play=()=>{if(tk!=gtok||flagged)return;if(tc){clkTick();if(flagged){busy=false;render();return}}const mvb=g.move(m)||g.move(ms[0]);sfx(mvb);clkAfter();anim=inst?null:"slide";busy=false;render()};
     if(inst)play();else setTimeout(play,w);
   },S.think?60:0);
@@ -1323,6 +1357,8 @@ function doResign(){resigned=true;sel=null;render()}
 const PD={elo:100,peak:100,streak:0,best:0,last:"",w:0,d:0,l:0,name:"Player",av:"♞|#81b64c"};
 let P=Object.assign({},PD,(()=>{try{return JSON.parse(localStorage.getItem("chessProfile")||"{}")}catch(e){return{}}})());
 function savePF(){try{localStorage.setItem("chessProfile",JSON.stringify(P))}catch(e){}}
+/* One-time stats reset: rating, peak, streaks and W/D/L go back to defaults. Name, avatar and saved games are kept. */
+(function(){try{if(localStorage.getItem("chessReset_v1"))return;P.elo=100;P.peak=100;P.streak=0;P.best=0;P.last="";P.w=0;P.d=0;P.l=0;savePF();localStorage.setItem("chessReset_v1","1")}catch(e){}})();
 const dstr=d=>d.toLocaleDateString("en-CA");
 function today(){return dstr(new Date())}
 function yest(){const d=new Date();d.setDate(d.getDate()-1);return dstr(d)}
